@@ -16,7 +16,7 @@ public abstract class Player {
         this.exp = 0;
     }
 
-    public int getID() { return id;}
+    public int getId() { return id;}
     public String getName() { return name; }
     public long getExp() { return exp; }
 

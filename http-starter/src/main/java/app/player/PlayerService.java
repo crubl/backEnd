@@ -1,14 +1,19 @@
 package app.player;
 
 import app.Storage;
-import app.exception.ValidationException;
 import app.exception.NotFoundException;
+import app.exception.ValidationException;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 public class PlayerService {
     private final Storage store;
 
-    public PlayerService(Storage store) { this.store = store; }
+    public PlayerService(Storage store) {
+        this.store = store;
+    }
 
     public List<Player> getAll(String type) {
         return store.players.values().stream()
@@ -17,7 +22,12 @@ public class PlayerService {
     }
 
     public Player create(String name, String type) {
-        if (name == null || name.isBlank()) { throw new ValidationException("name не должно быть пустым"); }
+        if (name == null || name.isBlank()) {
+            throw new ValidationException("name не должно быть пустым");
+        }
+        if (type == null || type.isBlank()) {
+            throw new ValidationException("type не должно быть пустым");
+        }
 
         int id = store.playerSeq.getAndIncrement();
 
@@ -32,11 +42,13 @@ public class PlayerService {
     }
 
     public Player getById(int id) {
-        if (id <= 0) { throw new ValidationException("id не может быть отрицательным"); }
-
+        if (id <= 0) {
+            throw new ValidationException("id не может быть отрицательным");
+        }
         Player player = store.players.get(id);
-        if (player == null) { throw new NotFoundException("Игрок с id " + id + " не найден"); }
-
+        if (player == null) {
+            throw new NotFoundException("Игрок с id " + id + " не найден");
+        }
         return player;
     }
 

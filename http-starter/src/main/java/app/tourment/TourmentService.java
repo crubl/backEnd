@@ -3,8 +3,11 @@ package app.tourment;
 import app.Storage;
 import app.exception.NotFoundException;
 import app.exception.ValidationException;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 public class TourmentService {
     private final Storage store;
 
@@ -19,16 +22,24 @@ public class TourmentService {
     }
 
     public Tourment getById(int id) {
-        if (id <= 0) { throw new ValidationException("id должен быть положительным"); };
-
+        if (id <= 0) {
+            throw new ValidationException("id должен быть положительным");
+        }
         Tourment tourment = store.tourments.get(id);
-        if (tourment == null) { throw new NotFoundException("Турнир с id " + id + " не найден"); };
+        if (tourment == null) {
+            throw new NotFoundException("Турнир с id " + id + " не найден");
+        }
         return tourment;
     }
 
-    public Tourment create(String type, String name,  int gameId, int minExp, int minPlayers, int duration) {
-        if (name == null || name.isBlank()) { throw new ValidationException("Название турнира не может быть пустым"); }
-        if (type == null || type.isBlank()) { throw new ValidationException("Тип турнира не может быть пустым"); }
+    public Tourment create(String type, String name, int gameId,
+                           int minExp, int minPlayers, int duration) {
+        if (name == null || name.isBlank()) {
+            throw new ValidationException("Название турнира не может быть пустым");
+        }
+        if (type == null || type.isBlank()) {
+            throw new ValidationException("Тип турнира не может быть пустым");
+        }
 
         int id = store.tourmentSeq.getAndIncrement();
 
@@ -44,7 +55,9 @@ public class TourmentService {
 
     public Tourment update(int id, String newName) {
         Tourment tourment = getById(id);
-        if (newName != null && !newName.isBlank()) { tourment.setName(newName); }
+        if (newName != null && !newName.isBlank()) {
+            tourment.setName(newName);
+        }
         return tourment;
     }
 
